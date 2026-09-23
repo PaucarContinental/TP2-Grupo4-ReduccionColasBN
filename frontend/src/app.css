@@ -1,0 +1,118 @@
+@import '@fontsource/atkinson-hyperlegible-next/400.css';
+@import '@fontsource/atkinson-hyperlegible-next/700.css';
+@import '@fontsource/ibm-plex-mono/500.css';
+@import '@fontsource/ibm-plex-mono/700.css';
+
+@import 'tailwindcss';
+@import '@skeletonlabs/skeleton';
+@import '@skeletonlabs/skeleton/optional/presets';
+@import './lib/theme/bn-grafito.css';
+
+@source '../node_modules/@skeletonlabs/skeleton-svelte/dist';
+
+@theme static {
+	--font-ticket: 'IBM Plex Mono', ui-monospace, 'Cascadia Mono', Consolas, monospace;
+}
+
+/*
+ * Base: tipografía Atkinson Hyperlegible (diseñada para baja visión) a 18 px,
+ * pensando en la persona usuaria "Rosa Quispe, 68 años".
+ */
+html {
+	font-size: 112.5%;
+	background: var(--color-surface-50);
+}
+
+body {
+	min-height: 100dvh;
+	accent-color: var(--color-surface-950);
+	color: var(--color-surface-950);
+	-webkit-font-smoothing: antialiased;
+}
+
+:focus-visible {
+	outline: 3px solid var(--color-warning-500);
+	outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+@layer components {
+	/* Banda gris superior, igual a los wireframes. */
+	.banda {
+		@apply flex flex-wrap items-center justify-between gap-x-6 gap-y-2 border-b border-surface-300 bg-surface-100 px-5 py-3 text-sm;
+	}
+
+	/* Botón principal oscuro de los wireframes. */
+	.btn-principal {
+		@apply btn min-h-12 preset-filled-surface-950-50 px-6 font-bold;
+	}
+
+	.btn-secundario {
+		@apply btn min-h-12 border border-surface-400 px-5 font-bold hover:bg-surface-100;
+	}
+
+	/* Nota amarilla punteada de los wireframes. */
+	.nota {
+		@apply rounded-base border border-dashed border-warning-600 bg-warning-50 px-4 py-3 text-sm leading-relaxed text-warning-950;
+	}
+
+	.error-caja {
+		@apply rounded-base border border-error-400 bg-error-50 px-4 py-3 text-sm text-error-800;
+	}
+
+	.campo {
+		@apply input min-h-12 border-surface-400 bg-white px-4 text-base;
+	}
+
+	.selector {
+		@apply select min-h-12 border-surface-400 bg-white px-4 text-base;
+	}
+
+	.etiqueta {
+		@apply mb-1.5 block text-sm font-bold text-surface-800;
+	}
+
+	.panel {
+		@apply rounded-container border border-surface-300 bg-white;
+	}
+
+	.codigo {
+		font-family: var(--font-ticket);
+		font-feature-settings: 'zero' 1;
+		letter-spacing: 0.02em;
+	}
+
+	.tabla {
+		@apply w-full border-collapse text-left text-sm;
+	}
+	.tabla th {
+		@apply border-b border-surface-300 bg-surface-200 px-3 py-2.5 font-bold text-surface-900;
+	}
+	.tabla td {
+		@apply border-b border-surface-200 px-3 py-2.5 align-middle;
+	}
+}
+
+/* Impresión del ticket: solo se imprime el bloque marcado. */
+@media print {
+	body * {
+		visibility: hidden;
+	}
+	.imprimible,
+	.imprimible * {
+		visibility: visible;
+	}
+	.imprimible {
+		position: absolute;
+		inset: 0 auto auto 0;
+		width: 80mm;
+	}
+}

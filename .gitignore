@@ -1,0 +1,30 @@
+# Node / SvelteKit
+node_modules/
+.svelte-kit/
+build/
+dist/
+.vite/
+
+# Variables de entorno
+.env
+.env.*
+!.env.example
+
+# PocketBase
+backend/pocketbase
+backend/pocketbase.exe
+backend/pb_data/
+backend/pb_public/
+
+# Editores y SO
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
+.idea/
+*.swp
+Thumbs.db
+.DS_Store
+
+# Logs
+*.log
+npm-debug.log*
