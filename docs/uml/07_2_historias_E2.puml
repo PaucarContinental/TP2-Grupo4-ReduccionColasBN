@@ -1,0 +1,22 @@
+@startuml historias_E2
+!include estilo.iuml
+title Historias de usuario — E2 · Panel del operador
+skinparam RectangleBackgroundColor #FFFFFF
+skinparam RectangleFontSize 12
+skinparam PackageFontSize 14
+skinparam nodesep 25
+skinparam ranksep 25
+left to right direction
+
+package "E2 · Panel del operador" as E2 {
+  rectangle "<b>HU-10 · Ingresar con credenciales institucionales</b>\n----\n<b>Como</b> operador de ventanilla,\n<b>quiero</b> iniciar sesión con usuario y contraseña\n<b>para</b> proteger el panel según la normativa SBS.\n----\n✔ No usa el DNI del cliente\n✔ Error claro si falla\n<back:#E3B622> Prioridad: Alta </back>   Puntos: 2" as HU10
+  rectangle "<b>HU-11 · Ver la cola priorizada</b>\n----\n<b>Como</b> operador,\n<b>quiero</b> ver los turnos de mi agencia, prioritarios primero\n<b>para</b> atender en el orden correcto.\n----\n✔ Filtro Presencial / Virtual / Todos\n✔ Actualización en tiempo real\n<back:#E3B622> Prioridad: Alta </back>   Puntos: 5" as HU11
+  rectangle "<b>HU-12 · Llamar al siguiente turno</b>\n----\n<b>Como</b> operador,\n<b>quiero</b> llamar al siguiente con un clic\n<b>para</b> agilizar la atención.\n----\n✔ Asigna mi ventanilla al turno\n✔ No permite dos atenciones abiertas\n<back:#E3B622> Prioridad: Alta </back>   Puntos: 3" as HU12
+  rectangle "<b>HU-13 · Ver la ficha de contexto</b>\n----\n<b>Como</b> operador,\n<b>quiero</b> ver documento, trámite, monto y observación\n<b>para</b> atender sin pedir datos de nuevo.\n----\n✔ Muestra verificación con Mainframe/AS400\n✔ Enlace Meet si es virtual\n<back:#E3B622> Prioridad: Alta </back>   Puntos: 3" as HU13
+  rectangle "<b>HU-14 · Cerrar la atención</b>\n----\n<b>Como</b> operador,\n<b>quiero</b> finalizar o marcar «no se presentó»\n<b>para</b> liberar la ventanilla.\n----\n✔ Registra hora de fin\n✔ Vuelve a la cola\n<back:#E3B622> Prioridad: Alta </back>   Puntos: 2" as HU14
+  HU10 -[hidden]down- HU11
+  HU11 -[hidden]down- HU12
+  HU10 -[hidden]left- HU13
+  HU13 -[hidden]down- HU14
+}
+@enduml

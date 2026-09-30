@@ -109,9 +109,24 @@ export const NOMBRE_NIVEL: Record<NivelCongestion, string> = {
 	alta: 'Mucha gente'
 };
 
+/**
+ * Reconoce un error del SDK de PocketBase. No basta con `instanceof`: si hay dos copias del
+ * SDK cargadas (por ejemplo, en las pruebas), la clase no coincide; por eso también se
+ * revisa el nombre del error. Hallazgo de las pruebas unitarias (Guía 07).
+ */
+function esErrorPocketBase(err: unknown): err is ClientResponseError {
+	return (
+		err instanceof ClientResponseError ||
+		(typeof err === 'object' &&
+			err !== null &&
+			// El SDK nombra el error como "ClientResponseError <status>".
+			String((err as { name?: unknown }).name).startsWith('ClientResponseError'))
+	);
+}
+
 /** Mensaje legible a partir de cualquier error del SDK de PocketBase. */
 export function mensajeError(err: unknown): string {
-	if (err instanceof ClientResponseError) {
+	if (esErrorPocketBase(err)) {
 		if (err.status === 0)
 			return 'No hay conexión con el servidor. Revisa tu red e inténtalo otra vez.';
 		const datos = err.response?.data as Record<string, { message?: string }> | undefined;

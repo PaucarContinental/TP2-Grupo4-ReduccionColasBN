@@ -1,0 +1,52 @@
+@startuml secuencia_reservar
+!include estilo.iuml
+title Diagrama de secuencia — Reservar una cita (HU-01 a HU-06)
+autonumber
+
+actor "Cliente" as C
+participant "App web\n(SvelteKit)" as UI
+participant "PocketBase\npb_hooks" as API
+participant "ModeloHorarios" as M
+database "SQLite" as DB
+participant "Padrón legado\n(Mainframe/AS400)" as L
+
+C -> UI : Ingresa tipo y número de documento
+UI -> API : POST /api/citas/identificar
+API -> API : validarDocumento()
+alt formato inválido
+  API --> UI : 400 «El DNI debe tener 8 dígitos»
+  UI --> C : Muestra error
+else formato válido
+  API -> L : Buscar documento
+  L --> API : nombres / no encontrado
+  API -> DB : Crear o actualizar Cliente
+  API --> UI : token + cliente
+end
+
+C -> UI : Elige canal, agencia, trámite y prioridad
+UI -> API : GET /api/citas/horarios?agencia&fecha
+API -> M : calcularHorarios()
+M -> DB : Afluencia histórica + citas reservadas + ventanillas activas
+M -> M : P(X ≥ capacidad), X ~ Poisson(λ)
+M --> API : franjas + recomendada
+API --> UI : Horarios con nivel de afluencia
+UI --> C : Preselecciona el horario recomendado
+
+C -> UI : Confirma (monto y observación opcionales)
+UI -> API : POST /api/citas/turno
+activate API
+API -> DB : BEGIN
+API -> M : calcularHorarios() (revalida cupo)
+API -> DB : ¿cita duplicada?
+alt horario lleno o duplicado
+  API -> DB : ROLLBACK
+  API --> UI : 400 + motivo
+else correcto
+  API -> M : crearTurno() → código C-###, enlace Meet si es plataforma
+  M -> DB : INSERT turno (en_espera)
+  API -> DB : COMMIT
+  API --> UI : { id, codigo }
+end
+deactivate API
+UI --> C : Ticket con número de turno
+@enduml

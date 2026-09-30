@@ -1,0 +1,30 @@
+@startuml historias_E1
+!include estilo.iuml
+title Historias de usuario — E1 · Portal del cliente
+skinparam RectangleBackgroundColor #FFFFFF
+skinparam RectangleFontSize 12
+skinparam PackageFontSize 14
+skinparam nodesep 25
+skinparam ranksep 25
+left to right direction
+
+package "E1 · Portal del cliente" as E1 {
+  rectangle "<b>HU-01 · Identificarme con mi documento</b>\n----\n<b>Como</b> cliente del banco,\n<b>quiero</b> ingresar solo con mi DNI, CE, pasaporte o PTP\n<b>para</b> no tener que recordar usuario ni contraseña.\n----\n✔ DNI de 8 dígitos; si no, mensaje claro\n✔ Se verifica contra el padrón legado\n<back:#E3B622> Prioridad: Alta </back>   Puntos: 3" as HU01
+  rectangle "<b>HU-02 · Elegir cómo ser atendido</b>\n----\n<b>Como</b> cliente,\n<b>quiero</b> elegir entre ventanilla o videollamada\n<b>para</b> no ir a la agencia si no es necesario.\n----\n✔ Dos tarjetas: Ventanilla / Plataforma\n✔ Plataforma genera enlace Meet\n<back:#E3B622> Prioridad: Alta </back>   Puntos: 2" as HU02
+  rectangle "<b>HU-03 · Indicar trámite y prioridad</b>\n----\n<b>Como</b> adulto mayor, gestante o persona con discapacidad,\n<b>quiero</b> marcar atención prioritaria\n<b>para</b> ser atendido primero.\n----\n✔ Catálogo de trámites en chips\n✔ Motivo obligatorio si marca prioridad\n<back:#E3B622> Prioridad: Alta </back>   Puntos: 3" as HU03
+  rectangle "<b>HU-04 · Ver horarios con menos gente</b>\n----\n<b>Como</b> cliente,\n<b>quiero</b> ver la afluencia estimada de cada franja\n<b>para</b> evitar las horas de mayor congestión.\n----\n✔ Modelo Poisson con historial + reservas\n✔ Horario recomendado preseleccionado\n<back:#E3B622> Prioridad: Alta </back>   Puntos: 8" as HU04
+  rectangle "<b>HU-05 · Dejar datos al operador</b>\n----\n<b>Como</b> cliente,\n<b>quiero</b> registrar monto aproximado y observación\n<b>para</b> no repetir la información en ventanilla.\n----\n✔ Campos opcionales\n✔ Visibles en la ficha del operador\n<back:#BDBDB8> Prioridad: Media </back>   Puntos: 2" as HU05
+  rectangle "<b>HU-06 · Recibir mi ticket</b>\n----\n<b>Como</b> cliente,\n<b>quiero</b> obtener un ticket con número de turno\n<b>para</b> presentarlo o guardarlo.\n----\n✔ Código C-### por agencia y día\n✔ Imprimir / compartir\n<back:#E3B622> Prioridad: Alta </back>   Puntos: 3" as HU06
+  rectangle "<b>HU-07 · Seguir mi turno en tiempo real</b>\n----\n<b>Como</b> cliente,\n<b>quiero</b> ver mi posición y espera estimada\n<b>para</b> llegar justo a tiempo.\n----\n✔ Se actualiza cada 5 s\n✔ Aviso «turno próximo»\n<back:#E3B622> Prioridad: Alta </back>   Puntos: 5" as HU07
+  rectangle "<b>HU-08 · Cancelar mi cita</b>\n----\n<b>Como</b> cliente,\n<b>quiero</b> cancelar un turno en espera\n<b>para</b> liberar el cupo para otra persona.\n----\n✔ Solo turnos propios en espera\n✔ Pide confirmación\n<back:#BDBDB8> Prioridad: Media </back>   Puntos: 2" as HU08
+  rectangle "<b>HU-09 · Ver historial y perfil</b>\n----\n<b>Como</b> cliente,\n<b>quiero</b> consultar mis citas pasadas y mis datos\n<b>para</b> llevar control de mis trámites.\n----\n✔ Historial con estados\n✔ Documento enmascarado ****231\n<back:#E8E8E5> Prioridad: Baja </back>   Puntos: 2" as HU09
+  HU01 -[hidden]down- HU02
+  HU02 -[hidden]down- HU03
+  HU01 -[hidden]left- HU04
+  HU04 -[hidden]down- HU05
+  HU05 -[hidden]down- HU06
+  HU04 -[hidden]left- HU07
+  HU07 -[hidden]down- HU08
+  HU08 -[hidden]down- HU09
+}
+@enduml

@@ -1,0 +1,14 @@
+@startuml historias_E4
+!include estilo.iuml
+title Historias de usuario — E4 · Sala de espera
+skinparam RectangleBackgroundColor #FFFFFF
+skinparam RectangleFontSize 12
+skinparam PackageFontSize 14
+skinparam nodesep 25
+skinparam ranksep 25
+left to right direction
+
+package "E4 · Sala de espera" as E4 {
+  rectangle "<b>HU-18 · Ver los turnos llamados en pantalla</b>\n----\n<b>Como</b> cliente en la agencia,\n<b>quiero</b> ver qué turno se llama y a qué ventanilla\n<b>para</b> acercarme sin estar pendiente de un altavoz.\n----\n✔ Refresco cada 3 s, sin datos personales\n✔ Destaca el último llamado\n<back:#BDBDB8> Prioridad: Media </back>   Puntos: 3" as HU18
+}
+@enduml

@@ -55,6 +55,17 @@ npm run check
 npm run build
 ```
 
+### Pruebas automatizadas (Mocha + Chai)
+
+```bash
+npm install          # en la raíz, una sola vez
+npm test             # 77 pruebas unitarias y de integración
+npm run test:reporte # reporte HTML en tests/reporte/
+```
+
+Detalle por integrante en `tests/README.md`. GitHub Actions las ejecuta en cada push
+(`.github/workflows/pruebas.yml`).
+
 Para publicar el frontend en PocketBase: `npm run build` y copiar `frontend/build/*` a
 `backend/pb_public/`. Despliegue en Debian: `docs/despliegue/desplegar-debian.sh`.
 

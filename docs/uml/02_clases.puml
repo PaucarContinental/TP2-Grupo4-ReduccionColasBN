@@ -1,0 +1,140 @@
+@startuml clases
+!include estilo.iuml
+title Diagrama de clases — Modelo de datos y lógica de negocio
+
+hide empty members
+skinparam linetype ortho
+
+enum Canal {
+  ventanilla
+  plataforma
+}
+enum EstadoTurno {
+  en_espera
+  atendiendo
+  atendido
+  cancelado
+  no_asistio
+}
+enum TipoDocumento {
+  DNI
+  CE
+  PASAPORTE
+  PTP
+}
+enum TipoPrioridad {
+  adulto_mayor
+  gestante
+  discapacidad
+}
+enum Rol {
+  operador
+  admin
+}
+
+class Agencia <<colección>> {
+  +id: string
+  +nombre: string
+  +region: string
+  +direccion: string
+  +hora_apertura: HH:MM
+  +hora_cierre: HH:MM
+  +activa: bool
+}
+class Ventanilla <<colección>> {
+  +id: string
+  +numero: int
+  +activa: bool
+}
+class Servicio <<colección>> {
+  +id: string
+  +nombre: string
+  +duracion_min: int
+  +orden: int
+  +activo: bool
+}
+class Cliente <<auth>> {
+  +id: string
+  +tipo_documento: TipoDocumento
+  +numero_documento: string
+  +nombres: string
+  +verificado_legado: bool
+}
+class Operador <<auth users>> {
+  +id: string
+  +usuario: string
+  +name: string
+  +email: string
+  +rol: Rol
+}
+class Turno <<colección>> {
+  +id: string
+  +codigo: string  «C-045»
+  +canal: Canal
+  +prioridad: bool
+  +tipo_prioridad: TipoPrioridad
+  +fecha: YYYY-MM-DD
+  +hora: HH:MM
+  +estado: EstadoTurno
+  +monto_aprox: number
+  +observacion: string
+  +enlace_meet: url
+  +llamado_en: datetime
+  +finalizado_en: datetime
+}
+class PadronLegado <<simula Mainframe/AS400>> {
+  +tipo_documento: TipoDocumento
+  +numero_documento: string
+  +nombres: string
+  +tiene_cts: bool
+  +es_pensionista: bool
+}
+class AfluenciaHistorica <<colección>> {
+  +dia_semana: 1..6
+  +franja: HH:MM
+  +promedio_llegadas: number
+}
+
+class ModeloHorarios <<pb_hooks/lib>> {
+  +calcularHorarios(agencia, fecha): RespuestaHorarios
+  +probPoissonAlMenos(λ, k): number
+  +franjasDelDia(agencia, fecha): string[]
+  +crearTurno(datos): Turno
+  +construirCola(agencia, fecha): ItemCola[]
+  +validarDocumento(tipo, numero): string
+}
+class Franja <<DTO>> {
+  +hora: HH:MM
+  +probabilidad: number
+  +nivel: baja | media | alta
+  +cupos_libres: int
+  +disponible: bool
+  +recomendado: bool
+}
+class ItemCola <<DTO>> {
+  +codigo: string
+  +servicio: string
+  +canal: Canal
+  +estado: EstadoTurno
+  +prioridad: bool
+  +ventanilla: int
+  +posicion: int
+  +espera_min: int
+}
+
+Agencia "1" *-- "1..*" Ventanilla : tiene >
+Agencia "1" *-- "0..*" AfluenciaHistorica : historial >
+Agencia "1" o-- "0..*" Operador : emplea >
+Operador "0..*" --> "0..1" Ventanilla : asignado a >
+Turno "0..*" --> "1" Agencia
+Turno "0..*" --> "1" Servicio
+Turno "0..*" --> "1" Cliente : solicitado por >
+Turno "0..*" --> "0..1" Ventanilla : atendido en >
+Turno "0..*" --> "0..1" Operador : atendido por >
+Cliente ..> PadronLegado : se valida contra >
+
+ModeloHorarios ..> AfluenciaHistorica : lee
+ModeloHorarios ..> Turno : crea / ordena
+ModeloHorarios ..> Franja : produce
+ModeloHorarios ..> ItemCola : produce
+@enduml

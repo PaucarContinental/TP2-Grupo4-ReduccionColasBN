@@ -1,0 +1,16 @@
+@startuml estados_turno
+!include estilo.iuml
+title Diagrama de estados — Turno
+
+[*] --> en_espera : Cliente genera ticket\n(POST /api/citas/turno)
+en_espera --> atendiendo : Operador llama\n(POST /api/panel/llamar)
+en_espera --> cancelado : Cliente cancela
+atendiendo --> atendido : Finalizar atención
+atendiendo --> no_asistio : No se presentó
+atendido --> [*]
+cancelado --> [*]
+no_asistio --> [*]
+
+state en_espera : visible en la cola y en la pantalla\nordenado por prioridad y hora
+state atendiendo : se muestra en la pantalla de llamados\ncon la ventanilla asignada
+@enduml

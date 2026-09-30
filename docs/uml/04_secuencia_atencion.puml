@@ -1,0 +1,39 @@
+@startuml secuencia_atencion
+!include estilo.iuml
+title Diagrama de secuencia — Atención en ventanilla (HU-11 a HU-14, HU-18)
+autonumber
+
+actor "Operador" as O
+participant "Panel interno\n(SvelteKit)" as P
+participant "PocketBase\npb_hooks" as API
+database "SQLite" as DB
+participant "Pantalla de\nllamados" as S
+actor "Cliente" as C
+
+O -> API : auth-with-password (usuario, contraseña)
+API --> O : token (rol, agencia, ventanilla)
+P -> API : GET /api/citas/cola/{agencia}
+API --> P : Cola priorizada (★ primero) y espera estimada
+P -> API : subscribe('turnos') [realtime SSE]
+
+O -> P : «Llamar siguiente turno» (filtro de canal)
+P -> API : POST /api/panel/llamar
+API -> DB : ¿el operador ya tiene una atención abierta?
+alt tiene una abierta
+  API --> P : Retoma la ficha abierta
+else no tiene
+  API -> DB : Primer turno en_espera ORDER BY prioridad DESC, hora, creado
+  API -> DB : UPDATE estado = atendiendo, ventanilla, operador, llamado_en
+  API --> P : { id, codigo }
+end
+API -->> P : evento realtime → recarga la cola
+S -> API : GET cola (cada 3 s)
+S --> C : «C-045 → Ventanilla 03»
+
+P -> API : GET turno + expand(cliente, servicio)
+API --> P : Ficha: documento, monto, observación, verificado legado
+O -> P : «Finalizar atención» / «No se presentó»
+P -> API : POST /api/panel/turno/{id}/finalizar
+API -> DB : UPDATE estado = atendido | no_asistio, finalizado_en
+API --> P : OK → vuelve a la cola
+@enduml

@@ -1,0 +1,18 @@
+@startuml historias_E3
+!include estilo.iuml
+title Historias de usuario — E3 · Responsable de agencia
+skinparam RectangleBackgroundColor #FFFFFF
+skinparam RectangleFontSize 12
+skinparam PackageFontSize 14
+skinparam nodesep 25
+skinparam ranksep 25
+left to right direction
+
+package "E3 · Responsable de agencia" as E3 {
+  rectangle "<b>HU-15 · Ver indicadores del día</b>\n----\n<b>Como</b> responsable de agencia,\n<b>quiero</b> ver atendidos, espera promedio y cancelados\n<b>para</b> medir el servicio.\n----\n✔ Se refresca cada 20 s\n✔ Datos solo de mi agencia\n<back:#BDBDB8> Prioridad: Media </back>   Puntos: 3" as HU15
+  rectangle "<b>HU-16 · Gestionar el catálogo</b>\n----\n<b>Como</b> responsable de agencia,\n<b>quiero</b> editar trámites, horarios y ventanillas activas\n<b>para</b> ajustar la capacidad real.\n----\n✔ Solo rol admin\n✔ El modelo usa ventanillas activas\n<back:#BDBDB8> Prioridad: Media </back>   Puntos: 5" as HU16
+  rectangle "<b>HU-17 · Exportar reporte de afluencia</b>\n----\n<b>Como</b> responsable de agencia,\n<b>quiero</b> descargar la afluencia por franja en CSV\n<b>para</b> ajustar el modelo de horarios.\n----\n✔ Rango de fechas\n✔ CSV compatible con Excel\n<back:#BDBDB8> Prioridad: Media </back>   Puntos: 3" as HU17
+  HU15 -[hidden]down- HU16
+  HU16 -[hidden]down- HU17
+}
+@enduml

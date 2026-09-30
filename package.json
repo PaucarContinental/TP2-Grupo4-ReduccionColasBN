@@ -1,0 +1,24 @@
+{
+	"name": "tp2-grupo4-reduccion-colas-bn",
+	"private": true,
+	"version": "1.0.0",
+	"description": "Pruebas unitarias y de integraci\u00f3n del Subsistema de Gesti\u00f3n de Citas (Mocha + Chai)",
+	"scripts": {
+		"test": "mocha \"tests/unit/**/*.test.{mjs,ts}\" \"tests/integracion/**/*.test.mjs\"",
+		"test:unit": "mocha \"tests/unit/**/*.test.{mjs,ts}\"",
+		"test:integracion": "mocha \"tests/integracion/**/*.test.mjs\"",
+		"test:reporte": "mocha \"tests/unit/**/*.test.{mjs,ts}\" \"tests/integracion/**/*.test.mjs\" --reporter mochawesome --reporter-option reportDir=tests/reporte,reportFilename=reporte-pruebas,reportTitle=\"Pruebas TP2 Grupo 4\",charts=true,inline=true"
+	},
+	"engines": {
+		"node": ">=22.12"
+	},
+	"devDependencies": {
+		"@types/chai": "^5.2.3",
+		"@types/mocha": "^10.0.10",
+		"chai": "^6.2.2",
+		"mocha": "^12.0.2",
+		"mochawesome": "^8.1.1",
+		"pocketbase": "^0.28.1",
+		"tsx": "^4.23.15"
+	}
+}

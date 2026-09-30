@@ -1,0 +1,37 @@
+@startuml despliegue
+!include estilo.iuml
+title Diagrama de componentes y despliegue — Cliente–servidor
+
+node "Servidor Debian 12" as srv {
+  node "Servicio systemd\npocketbase.service" {
+    component "PocketBase 0.40.4\n(API REST + realtime)" as PB
+    component "pb_hooks\n(citas.pb.js, panel.pb.js,\nlib/modelo.js)" as H
+    component "pb_migrations\n(esquema + datos iniciales)" as MIG
+    folder "pb_public\n(SvelteKit compilado)" as PUB
+    database "pb_data\n(SQLite)" as DB
+  }
+}
+
+node "PC Windows\n(navegador)" as win {
+  component "Portal del cliente\nPanel interno" as W
+}
+node "Android\n(navegador)" as and {
+  component "Portal del cliente" as A
+}
+node "TV de sala de espera" as tv {
+  component "Pantalla de llamados" as T
+}
+cloud "Google Meet" as meet
+node "Mainframe / AS400\n(simulado: padron_legado)" as legado
+
+PB -- H
+PB -- MIG
+PB -- PUB
+PB -- DB
+W --> PB : HTTP :8090 (REST + SSE)
+A --> PB : HTTP :8090
+T --> PB : HTTP :8090 (cada 3 s)
+W ..> meet : videollamada
+A ..> meet : videollamada
+H ..> legado : validación de documento
+@enduml
